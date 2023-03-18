@@ -1,0 +1,61 @@
+specVersion: 0.0.5
+description: Please Work
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Deployer
+    network: goerli
+    source:
+      address: "0x68aBD76F7Abd07Eef223C46814E50e5A46002D1C"
+      abi: Deployer
+      startBlock: 0
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/deployer.ts
+      entities:
+        - PoolCreated
+        - PoolRemoved
+      abis:
+        - name: Deployer
+          file: ./abis/Deployer.json
+      eventHandlers:
+        - event: PoolCreated(address,int256,uint256,uint256,uint256,uint256,uint256,string,string,address,uint256,address)
+          handler: handlePoolCreated
+        - event: PoolRemoved(address)
+          handler: handlePoolRemoved
+templates:
+  - kind: ethereum/contract
+    name: Pool
+    network: goerli
+    source:
+      abi: Pool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/deployer.ts
+      entities:
+        - Pool
+      abis:
+        - name: Pool
+          file: ./abis/pool.json
+      eventHandlers:
+        - event: ClaimsCreated(address,address)
+          handler: handleClaimsCreated
+        - event: DepNumNegChanged(uint256)
+          handler: handleDepNumNegChanged
+        - event: DepNumPosChanged(uint256)
+          handler: handleDepNumPosChanged
+        - event: ConditionChanged(bool)
+          handler: handleConditionChanged
+        - event: WithdrawChanged(bool)
+          handler: handleWithdrawChanged
+        - event: pastSettlementDateChanged(bool)
+          handler: handlePastSettlemenDateChanged
+        - event: contractGone(bool)
+          handler: handlecontractGone
+
+
