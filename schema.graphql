@@ -1,0 +1,97 @@
+type PoolCreated @entity(immutable: true) {
+  id: Bytes!
+  _oracle: Bytes! # address
+  _price: BigInt! # int256
+  _settlementDate: BigInt! # uint256
+  decay: BigInt! # uint256
+  maxRatioPOS: BigInt! # uint256
+  maxRatioNEG: BigInt! # uint256
+  maxRatioDate: BigInt! # uint256
+  name: String! # string
+  acronym: String! # string
+  poolAddress: Bytes! # address
+  turnToDustDate: BigInt! # uint256
+  deployerContract: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type PoolRemoved @entity(immutable: true) {
+  id: Bytes!
+  poolAddress: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+
+type ClaimsCreated @entity {
+  id:Bytes!
+  POS: Bytes!
+  NEG: Bytes!
+  pool: Pool!
+
+}
+
+type DepNumNegChanged @entity {
+  id:Bytes!
+  number: BigInt!
+  pool: Pool!
+
+}
+
+type DepNumPosChanged @entity {
+  id:Bytes!
+  number: BigInt!
+  pool: Pool!
+
+}
+
+type ConditionChanged @entity {
+  id:Bytes!
+  pool: Pool!
+
+
+}
+
+type WithdrawChanged @entity {
+  id:Bytes!
+  pool: Pool!
+
+}
+
+type PastSettlementDateChanged @entity {
+  id:Bytes!
+  pool: Pool!
+
+}
+
+type ContractGone @entity {
+  id:Bytes!
+  pool: Pool!
+
+}
+
+type Pool @entity {
+  id: Bytes!
+  _oracle: Bytes! # address
+  _price: BigInt! # int256
+  _settlementDate: BigInt! # uint256
+  decay: BigInt! # uint256
+  maxRatioPOS: BigInt! # uint256
+  maxRatioNEG: BigInt! # uint256
+  maxRatioDate: BigInt! # uint256
+  name: String! # string
+  acronym: String! # string
+  poolAddress: Bytes! # address
+  turnToDustDate: BigInt! # uint256
+  
+  claimsCreated: [ClaimsCreated!] @derivedFrom(field: "pool")
+  depNumNegChanged: [DepNumNegChanged!] @derivedFrom(field: "pool")
+  depNumPosChanged: [DepNumPosChanged!] @derivedFrom(field: "pool")
+  conditionChanged: [ConditionChanged!] @derivedFrom(field: "pool")
+  withdrawChanged: [WithdrawChanged!] @derivedFrom(field: "pool")
+  pastSettlementDateChanged: [PastSettlementDateChanged!] @derivedFrom(field: "pool")
+  contractGone: [ContractGone!] @derivedFrom(field: "pool")
+}
